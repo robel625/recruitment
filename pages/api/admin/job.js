@@ -1,5 +1,6 @@
 import connectDB from "../../../connectDB"
 import Job from "../../../model/jobModel"
+import Application from "../../../model/applicationModel"
 
 connectDB()
 
@@ -25,13 +26,23 @@ export default async (req, res) => {
 
     if (req.method === "GET") {
       try {
-        const job = await Job.find().populate('applied');
-        res.status(200).json(job);
+        const application = await Application.find().populate('jobId').populate('applicantId');
+        res.status(200).json(application);
       } catch (err) {
         res.status(404).json(err);
       }
 
     }
+
+    // if (req.method === "GET") {
+    //   try {
+    //     const job = await Job.find().populate('applied').populate('postedBy');
+    //     res.status(200).json(job);
+    //   } catch (err) {
+    //     res.status(404).json(err);
+    //   }
+
+    // }
     
   } catch (error) {
     console.log(error)

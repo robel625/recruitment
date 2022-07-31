@@ -24,6 +24,7 @@ const jobdesc = ({ job }) => {
 
     console.log("user", user.id)
     const apply =  user.id
+    const jobid =  job._id
 
     const updateJobSeeker = async (e) => {
       e.preventDefault();
@@ -31,12 +32,13 @@ const jobdesc = ({ job }) => {
         const config = {
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${cookies?.token}`
           },
         }
  
-        const { data } = await axios.put(
+        const { data } = await axios.post(
           `/api/admin/${job._id}`,
-          { apply },
+          { jobid, apply },
           config
         )
 

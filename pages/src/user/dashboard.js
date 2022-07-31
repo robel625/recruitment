@@ -23,32 +23,33 @@ import { GoogleLoginButton } from "react-social-login-buttons"
 import { loadUser } from "../../../redux/userAction"
 import { useDispatch } from "react-redux"
 import HeaderAuth from "../../../components/HeaderAuth"
+import AuthWrapper from "../../../components/auth/authWrapper"
 
 const theme = createTheme()
 
 function Dashboard() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const router = useRouter()
+  // const router = useRouter()
 
-  const cookies = parseCookies()
+  // const cookies = parseCookies()
 
-  const { data: session } = useSession()
+  // const { data: session } = useSession()
 
-  useEffect(() => {
-    if (!session && !cookies?.user) {
-      router.push("/src/user/login")
-    }
-  }, [router])
+  // useEffect(() => {
+  //   if (!session && !cookies?.user) {
+  //     router.push("/src/user/login")
+  //   }
+  // }, [router])
 
   return (
-    <>
+    <AuthWrapper>
       <HeaderAuth/>
       <Typography component="h1" variant="h5">
         Dashboard
       </Typography>
       <h3>This is secret page</h3>
-    </>
+    </AuthWrapper>
   )
 }
 

@@ -3,27 +3,40 @@ import Add from "./Add";
 import MultiStep from "./MultiStep"
 import axios from "axios";
 import { useEffect, useState } from "react";
-
+import {paginatePosts } from "../../redux/posts/postActions"
+import { useDispatch, useSelector } from "react-redux"
+import Paginate from "../Paginate";
 
 function ApplicationsList() {
     const [close, setClose] = useState(true)
     const [appl, setAppl] = useState([])
-    const [appl2, setAppl2] = useState([])
 
-     useEffect(() => {
-    getjobs()
-  }, []);
+    const paginate = useSelector((state) => state.paginate)
+  const { loading, error, posts } = paginate
+
+  console.log("pppp",posts)
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    const number = 1
+    dispatch(paginatePosts(number))
+
+  }, [])
+
+  //    useEffect(() => {
+  //   getjobs()
+  // }, []);
 
 
-  const getjobs = async () => {
-    const { data } = await axios.get(`/api/admin/job`)
-    setAppl(data)
-    // {appl?.map((j) =>
-    //   setAppl2(...j)
-    // )}
-    console.log(data)
-    //console.log("appl2", appl2)
-  }
+  // const getjobs = async () => {
+  //   const { data } = await axios.get(`/api/admin/job`)
+  //   setAppl(data)
+  //   // {appl?.map((j) =>
+  //   //   setAppl2(...j)
+  //   // )}
+  //   console.log(data)
+  //   //console.log("appl2", appl2)
+  // }
 
   console.log("appl", appl)
 
@@ -99,16 +112,16 @@ function ApplicationsList() {
                       </tr>
                       </thead>
                       <tbody class="divide-y divide-gray-100">
-                      {appl.map((j) =>
+                      {posts?.data?.map((j) =>
                          <tr class="bg-white">
                            <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
                              <a href="#" class="font-bold text-blue-500 hover:underline">1</a>
                            </td>
                            <td class="p-3 text-md font-semibold text-gray-700 whitespace-nowrap">
-                             Name : robel
-                             <p className='text-xs font-normal'> Applied for : {j.position}</p>
+                             Name : {j.applicantId?.name}
+                             <p className='text-xs font-normal'> Applied for : {j.jobId?.position} </p>
                            </td>
-                           <td class="p-3 text-sm text-gray-700 whitespace-nowrap text-center">New</td>
+                           <td class="p-3 text-sm text-gray-700 whitespace-nowrap text-center">{j.stage}</td>
                            <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
                                 <button className='ml-1 p-1.5 text-xs font-medium uppercase tracking-wider text-blue-800 bg-blue-200 rounded-md'>View</button>
                                 <button className='ml-1 p-1.5 text-xs font-medium uppercase tracking-wider text-blue-800 bg-blue-200 rounded-md'>Edit</button>
@@ -116,42 +129,13 @@ function ApplicationsList() {
                            </td>
                          </tr>
                           )}
-                         <tr class="bg-gray-50">
-                             <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                               <a href="#" class="font-bold text-blue-500 hover:underline">10002</a>
-                             </td>
-                             <td class="p-3 text-md font-semibold text-gray-700 whitespace-nowrap">
-                             Position : Web Developer
-                             <p className='text-xs font-normal'>fghklhklfjdg   asfhdkhkjh  sdafhkjh   asdfhkhasdkfj</p>
-                           </td>
-                             <td class="p-3 text-sm text-gray-700 whitespace-nowrap text-center">New</td>
-                             <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                                <button className='ml-1 p-1.5 text-xs font-medium uppercase tracking-wider text-blue-800 bg-blue-200 rounded-md'>View</button>
-                                <button className='ml-1 p-1.5 text-xs font-medium uppercase tracking-wider text-blue-800 bg-blue-200 rounded-md'>Edit</button>
-                                <button className='ml-1 p-1.5 text-xs font-medium uppercase tracking-wider text-red-800 bg-red-200 rounded-md'>Delete</button>
-                             </td>
-                        </tr>
-                        <tr class="bg-white">
-                             <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                               <a href="#" class="font-bold text-blue-500 hover:underline">10002</a>
-                             </td>
-                             <td class="p-3 text-md font-semibold text-gray-700 whitespace-nowrap">
-                             Position : Web Developer
-                             <p className='text-xs font-normal'>fghklhklfjdg   asfhdkhkjh  sdafhkjh   asdfhkhasdkfj</p>
-                           </td>
-                             <td class="p-3 text-sm text-gray-700 whitespace-nowrap text-center">New</td>
-                             <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                                <button className='ml-1 p-1.5 text-xs font-medium uppercase tracking-wider text-blue-800 bg-blue-200 rounded-md'>View</button>
-                                <button className='ml-1 p-1.5 text-xs font-medium uppercase tracking-wider text-blue-800 bg-blue-200 rounded-md'>Edit</button>
-                                <button className='ml-1 p-1.5 text-xs font-medium uppercase tracking-wider text-red-800 bg-red-200 rounded-md'>Delete</button>
-                             </td>
-                           </tr>
+                         
                       </tbody>
                     </table> 
                 </div>
                 <div className='mt-2 w-auto h-auto flex  items-start justify-between'>
                     <div className='' >Showing 1 to 10 of 11 entries</div>
-                    <div className=''>Previous</div>
+                    <Paginate/>
                 </div>
           </div>
           

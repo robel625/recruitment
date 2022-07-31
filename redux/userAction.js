@@ -17,7 +17,6 @@ export const loadUser = (email) => async (dispatch) => {
 
     const { data } = await axios.post(`/api/user/profile`, { email }, config)
 
-    console.log("data123", data)
 
     dispatch({
       type: LOAD_USER_SUCCESS,
