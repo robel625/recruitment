@@ -1,4 +1,5 @@
 import { useStepperContext } from "../../../contexts/StepperContext";
+import Link from 'next/link'
 
 export default function Final() {
   const { userData, setUserData } = useStepperContext();
@@ -34,11 +35,11 @@ export default function Final() {
         <div className="text-lg font-semibold text-gray-500">
           Your Account has been created.
         </div>
-        <a className="mt-10" href="/">
+        <Link href="/" className="mt-10">
           <button className="h-10 px-5 text-green-700 transition-colors duration-150 border border-gray-300 rounded-lg focus:shadow-outline hover:bg-green-500 hover:text-green-100">
             Close
           </button>
-        </a>
+        </Link>
       </div>
     </div>
   );

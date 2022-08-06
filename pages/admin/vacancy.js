@@ -9,7 +9,7 @@ import { getSession, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { connectToDatabase } from "../../util/mongodb";
 
-function vacancy({ jobs }) {
+function Vacancy({ jobs }) {
   const [modalOpen, setModalOpen] = useRecoilState(modalState);
   const [modalType, setModalType] = useRecoilState(modalTypeState);
   const router = useRouter();
@@ -36,7 +36,7 @@ function vacancy({ jobs }) {
   )
 }
 
-export default vacancy
+export default Vacancy
 
 
 export async function getServerSideProps(context) {

@@ -14,7 +14,7 @@ import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import { Worker } from '@react-pdf-viewer/core'; // install this library
 import { getSession, useSession } from "next-auth/react";
 
-export const view = () => {
+export const View = () => {
     const router = useRouter()
     const cookies = parseCookies()
     const [viewPdf, setViewPdf]=useState(null);
@@ -142,4 +142,4 @@ export async function getServerSideProps(context) {
   };
 }
 
-export default view
+export default View

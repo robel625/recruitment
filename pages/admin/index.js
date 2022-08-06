@@ -4,7 +4,7 @@ import HomeAdmin from '../../components/admin/HomeAdmin'
 import { getSession, useSession } from "next-auth/react";
 import { parseCookies } from "nookies"
 
-function index() {
+function Index() {
   return (
     <div>
        <div className='flex'>
@@ -52,4 +52,4 @@ export async function getServerSideProps(context) {
   };
 }
 
-export default index
+export default Index

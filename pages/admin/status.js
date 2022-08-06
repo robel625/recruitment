@@ -3,7 +3,7 @@ import SideNavbar from '../../components/admin/SideNavbar'
 import StatusForm from '../../components/admin/StatusForm'
 import { getSession, useSession } from "next-auth/react";
 
-function status() {
+function Status() {
   return (
     <div>
         <div className='flex'>
@@ -33,4 +33,4 @@ export async function getServerSideProps(context) {
   };
 }
 
-export default status
+export default Status

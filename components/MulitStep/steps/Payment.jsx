@@ -43,11 +43,11 @@ export default function Payment() {
                        <span className="text-red-200">Degree</span>
                     </option>
 										<option value="Diploma degree">Diploma degree</option>
-										<option value="Bachelor/s degree">Bachelor\'s degree</option>
+										<option value="Bachelor/s degree">Bachelors degree</option>
 										<option value="Doctor of Education - EdD">Doctor of Education - EdD</option>
 										<option value="Doctor of Law - JD">Doctor of Law - JD</option>
-										<option value="Master/s degree">Master\'s degree</option>
-										<option value="Engineer/s degree">Engineer\'s degree</option>
+										<option value="Master/s degree">Masters degree</option>
+										<option value="Engineer/s degree">Engineers degree</option>
 										<option value="Doctor of Philosophy - phD"> Doctor of Philosophy - phD</option>
 										<option value="Other">Other</option>
 						</select>

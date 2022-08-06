@@ -4,7 +4,7 @@ import TextEditor from '../../components/admin/TextEditor'
 import UsersList from '../../components/admin/UsersList'
 import { getSession, useSession } from "next-auth/react";
 
-function users() {
+function Users() {
   return (
     <div>
         <div className='flex'>
@@ -36,4 +36,4 @@ export async function getServerSideProps(context) {
 }
 
 
-export default users
+export default Users

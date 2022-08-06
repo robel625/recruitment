@@ -93,7 +93,7 @@ function ApplicationsList() {
   return (
     
         <div className=''>
-            <div class="p-5 md:w-auto bg-gray-100">
+            <div className="p-5 md:w-auto bg-gray-100">
                  <div className='mb-2 w-auto h-auto flex  items-start justify-between'>
                     <div className=' text-2xl font-bold ' >Appication List</div>
                     <div className=' p-2 bg-blue-700 rounded-lg' onClick={() => setClose(false)}>+ New Applicant</div>
@@ -147,30 +147,30 @@ function ApplicationsList() {
                  </div>
                </div>
                 
-                <div class="overflow-auto rounded-lg shadow hidden md:block">
-                   <table class="w-full">
-                      <thead class="bg-gray-50 border-b-2 border-gray-200">
+                <div className="overflow-auto rounded-lg shadow hidden md:block">
+                   <table className="w-full">
+                      <thead className="bg-gray-50 border-b-2 border-gray-200">
                       <tr>
-                        <th class="w-20 p-3 text-sm font-semibold tracking-wide text-center">#</th>
-                        <th class="p-3 text-sm font-semibold tracking-wide text-center">Applicant Information</th>
-                        <th class="w-24 p-3 text-sm font-semibold tracking-wide text-center">Email</th>
-                        <th class="w-24 p-3 text-sm font-semibold tracking-wide text-center">Status</th>
-                        <th class="w-32 p-3 text-sm font-semibold tracking-wide text-center">Action</th>
+                        <th className="w-20 p-3 text-sm font-semibold tracking-wide text-center">#</th>
+                        <th className="p-3 text-sm font-semibold tracking-wide text-center">Applicant Information</th>
+                        <th className="w-24 p-3 text-sm font-semibold tracking-wide text-center">Email</th>
+                        <th className="w-24 p-3 text-sm font-semibold tracking-wide text-center">Status</th>
+                        <th className="w-32 p-3 text-sm font-semibold tracking-wide text-center">Action</th>
                       </tr>
                       </thead>
-                      <tbody class="divide-y divide-gray-100">
+                      <tbody className="divide-y divide-gray-100">
                       {currentPosts && currentPosts.map((j) =>
-                         <tr key={j._id} class="bg-white">
-                           <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                             <a href="#" class="font-bold text-blue-500 hover:underline">1</a>
+                         <tr key={j._id} clasNames="bg-white">
+                           <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
+                             <a href="#" className="font-bold text-blue-500 hover:underline">1</a>
                            </td>
-                           <td class="p-3 text-md font-semibold text-gray-700 whitespace-nowrap">
+                           <td className="p-3 text-md font-semibold text-gray-700 whitespace-nowrap">
                              Name : {j.name}
                              <p className='text-xs font-normal'> Applied for : {j.position} </p>
                            </td>
-                           <td class="p-3 text-sm text-gray-700 whitespace-nowrap text-center">{j.email}</td>
-                           <td class="p-3 text-sm text-gray-700 whitespace-nowrap text-center">{j.stage}</td>
-                           <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                           <td className="p-3 text-sm text-gray-700 whitespace-nowrap text-center">{j.email}</td>
+                           <td className="p-3 text-sm text-gray-700 whitespace-nowrap text-center">{j.stage}</td>
+                           <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
                               <Link href={`/admin/view/${j._id}`}>
                                  <button className='ml-1 p-1.5 text-xs font-medium uppercase tracking-wider text-blue-800 bg-blue-200 rounded-md'>View</button>
                                </Link>

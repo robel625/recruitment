@@ -8,7 +8,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 
 
-function applications() {
+function Applications() {
 
  
   
@@ -44,4 +44,4 @@ export async function getServerSideProps(context) {
 
 
 
-export default applications
+export default Applications

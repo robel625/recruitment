@@ -13,7 +13,7 @@ import { toast } from "react-toastify"
 import Grid from "@mui/material/Grid"
 import FileBase from "react-file-base64"
 
-const jobdesc = ({ job }) => {
+const Jobdesc = ({ job }) => {
   const theme = 'bubble';
   //theme={"bubble"}
     const { quill, quillRef } = useQuill({theme});
@@ -268,7 +268,7 @@ export const getServerSideProps = async (req) => {
 
   
 
-export default jobdesc
+export default Jobdesc
 
 
 
