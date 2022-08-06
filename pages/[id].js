@@ -10,11 +10,18 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { parseCookies } from "nookies"
 import { toast } from "react-toastify"
+import Grid from "@mui/material/Grid"
+import FileBase from "react-file-base64"
 
 const jobdesc = ({ job }) => {
-    const { quill, quillRef } = useQuill();
+  const theme = 'bubble';
+  //theme={"bubble"}
+    const { quill, quillRef } = useQuill({theme});
     const { data: session } = useSession();
+    //const [selectedFile, setSelectedFile] = useState("")
     const cookies = parseCookies()
+
+    // console.log(selectedFile)
 
   const user = cookies?.user
     ? JSON.parse(cookies.user)
@@ -22,9 +29,13 @@ const jobdesc = ({ job }) => {
     ? session?.user
     : ""
 
-    console.log("user", user.id)
-    const apply =  user.id
+    const userid =  user.id
+    const email =  user.email
+    const name =  user.name
     const jobid =  job._id
+    const position =  job.position
+    
+    
 
     const updateJobSeeker = async (e) => {
       e.preventDefault();
@@ -38,7 +49,7 @@ const jobdesc = ({ job }) => {
  
         const { data } = await axios.post(
           `/api/admin/${job._id}`,
-          { jobid, apply },
+          { jobid, position, userid, email, name, pdfFile},
           config
         )
 
@@ -74,13 +85,40 @@ const jobdesc = ({ job }) => {
 
     useEffect(() => {
         if (quill) {
-          quill.clipboard.dangerouslyPasteHTML('<h1> TiTle</h1><ol><li>asdfasdf oreder list</li><li>sadfaf</li><li>asdfas</li></ol><p>asdfjhaslkjdfhajkshdfkjh pargtaph</p><h2> Responcebility</h2><ul><li>unorderlist</li><li>sdfsd</li><li>asdfsa</li></ul><h3> color</h3><p><strong style="background-color: rgb(0, 138, 0);">asdfasfasdfasdfsdfasdfasdfsfadf</strong></p><p><span style="color: rgb(178, 178, 0);">asdfsdfasddaasdfasdfasdfasdfadf</span></p><p><u style="color: rgb(178, 178, 0);">aasdfasdfasfadfsfaasfdfasfasfd</u></p>');
+          // quill.clipboard.dangerouslyPasteHTML('<h1> TiTle</h1><ol><li>asdfasdf oreder list</li><li>sadfaf</li><li>asdfas</li></ol><p>asdfjhaslkjdfhajkshdfkjh pargtaph</p><h2> Responcebility</h2><ul><li>unorderlist</li><li>sdfsd</li><li>asdfsa</li></ul><h3> color</h3><p><strong style="background-color: rgb(0, 138, 0);">asdfasfasdfasdfsdfasdfasdfsfadf</strong></p><p><span style="color: rgb(178, 178, 0);">asdfsdfasddaasdfasdfasdfasdfadf</span></p><p><u style="color: rgb(178, 178, 0);">aasdfasdfasfadfsfaasfdfasfasfd</u></p>');
+          quill.clipboard.dangerouslyPasteHTML(job.discripition);
         }
       }, [quill]);
+
+  const [pdfFile, setPdfFile]=useState(null);
+  const [pdfFileError, setPdfFileError]=useState('');
+
+  const fileType=['application/pdf'];
+  const handlePdfFileChange=(e)=>{
+    let selectedFile=e.target.files[0];
+    if(selectedFile){
+      if(selectedFile&&fileType.includes(selectedFile.type)){
+        let reader = new FileReader();
+            reader.readAsDataURL(selectedFile);
+            reader.onloadend = (e) =>{
+              setPdfFile(e.target.result);
+              setPdfFileError('');
+            }
+      }
+      else{
+        setPdfFile(null);
+        setPdfFileError('Please select valid pdf file');
+      }
+    }
+    else{
+      console.log('select your file');
+    }
+  }
    
     return (
       <>
       <Header/> 
+      
         <div className="m-20 p-5 shadow-sm ">
            <div className='p-3 flex items-center justify-between bg-amber-700'>
               <div className='flex items-center flex-1'>
@@ -96,7 +134,19 @@ const jobdesc = ({ job }) => {
                 <div className='p-0.5 border border-solid border-black'>t</div>
               </div>
            </div>
-                        
+           {/* <Grid item xs={12}>
+                <FileBase
+                  type="file"
+                  multiple={false}
+                  onDone={({ base64 }) => setSelectedFile(base64)}
+                />
+              </Grid>     */}
+              <form className='form-group' >
+                <input type="file" className='form-control'
+                  required onChange={handlePdfFileChange}
+                />
+                {pdfFileError&&<div className='error-msg'>{pdfFileError}</div>}
+              </form>
             <div>
                   <h1 className='ml-5'>{job.position} </h1>
                   <span className='mr-10 text-gray-700'>Job by Safaricom Telecommunications Ethiopia PLC </span>
@@ -175,9 +225,10 @@ const jobdesc = ({ job }) => {
            </div>
               
               
-              {/* <div style={{ width: 500, height: 300 }}>
+              <div>
                <div ref={quillRef}/>
-               </div> */}
+               </div>
+               
            
                 
         </div>
@@ -207,7 +258,7 @@ export const getServerSideProps = async (req) => {
         avalablity: job.avalablity,
         status:job.status,
         miniDesc: job.miniDesc,
-        // discripition: job.descripition,
+        discripition: job.discripition,
         // posted: job.createdAt
         }
       },

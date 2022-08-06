@@ -6,12 +6,12 @@ export async function middleware(req) {
 
     const url =req.url;
 
-    if(url.includes("/admin")){
-      const session = await getToken({
-        req,
-        secret: process.env.JWT_SECRET,
-        secureCookie: process.env.NODE_ENV === 'production',
-      });
-      if (!session) return NextResponse.redirect(`${origin}/`);
-    }
+    // if(url.includes("/admin")){
+    //   const session = await getToken({
+    //     req,
+    //     secret: process.env.JWT_SECRET,
+    //     secureCookie: process.env.NODE_ENV === 'production',
+    //   });
+    //   if (!session) return NextResponse.redirect(`${origin}/`);
+    // }
   }

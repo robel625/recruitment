@@ -15,6 +15,10 @@ const userSchema = mongoose.Schema({
   password: {
     type: String,
   },
+  role: {
+    type: String,
+    default: 'user',
+  },
   resetToken: { type: String },
   update: { type: String },
   validEmail: { type: String, default: "not" },

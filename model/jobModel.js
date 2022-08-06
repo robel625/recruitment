@@ -16,7 +16,6 @@ const jobSchema = mongoose.Schema({
   discripition: {
     type: String,
   },
-  applied: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   postedBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User"

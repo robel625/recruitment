@@ -11,6 +11,7 @@ import theme from "../theme"
 import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { RecoilRoot } from "recoil";
+//import 'bootstrap/dist/css/bootstrap.css';
 
 import { wrapper } from "../redux/store"
 

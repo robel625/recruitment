@@ -23,27 +23,24 @@ function applications() {
   )
 }
 
-// export async function getServerSideProps(context) {
-//   const session = await getSession(context);
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
 
-//   if (!session) {
-//     return {
-//       redirect: {
-//         permanent: false,
-//         destination: "/",
-//       },
-//     };
-//   }
+  if (!session) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/src/user/login",
+      },
+    };
+  }
 
-  // export const getServerSideProps = async (context) => {
-  //   const res = await axios.get("https://jsonplaceholder.typicode.com/users");
-  //   console.log(res)
-  //   return {
-  //     props: {
-  //       job: res.data,
-  //     },
-  //   };
-  // };
+  return {
+    props: {
+      session,
+    },
+  };
+}
 
 
 

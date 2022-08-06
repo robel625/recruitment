@@ -5,64 +5,94 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import {paginatePosts } from "../../redux/posts/postActions"
 import { useDispatch, useSelector } from "react-redux"
-import Paginate from "../Paginate";
+import FrontPaginate from "./FrontPaginate";
+import { parseCookies } from "nookies"
+import { toast } from "react-toastify"
+import Link from 'next/link';
+import { useRouter } from "next/router";
+
+    
 
 function ApplicationsList() {
     const [close, setClose] = useState(true)
-    const [appl, setAppl] = useState([])
+    const [deleted, setDeleted] = useState(false)
+    const [position1, setPosition] = useState("")
+    const [name1, setName] = useState("")
+    const [email1, setEmail] = useState("")
+    const [status1, setStatus] = useState("")
+    const [realtimeApplicant, setRealtimeApplicants] = useState("")
 
-    const paginate = useSelector((state) => state.paginate)
-  const { loading, error, posts } = paginate
+    const cookies = parseCookies()
+    const router = useRouter()
 
-  console.log("pppp",posts)
-  const dispatch = useDispatch()
+   
+    useEffect(() => {
+      const fetchPosts = async () => {
+        try {
+          const config = {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${cookies?.token}`
+            },
+          }
+        const application = await axios.get(
+          `/api/admin/job`,
+          config
+        ) 
+        setRealtimeApplicants(application.data);
+        } catch (error) {
+          toast.error(error.response)
+        }
+      }
+      fetchPosts();
+    }, []);
 
-  useEffect(() => {
-    const number = 1
-    dispatch(paginatePosts(number))
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postsPerPage] = useState(5);
 
-  }, [])
-
-  //    useEffect(() => {
-  //   getjobs()
-  // }, []);
-
-
-  // const getjobs = async () => {
-  //   const { data } = await axios.get(`/api/admin/job`)
-  //   setAppl(data)
-  //   // {appl?.map((j) =>
-  //   //   setAppl2(...j)
-  //   // )}
-  //   console.log(data)
-  //   //console.log("appl2", appl2)
-  // }
-
-  console.log("appl", appl)
-
-  
-
-  // 
-
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentPosts = realtimeApplicant && realtimeApplicant.slice(indexOfFirstPost, indexOfLastPost);
 
 
-    // let [users, setUsers] = useState([]);
+  const paginate = pageNumber => setCurrentPage(pageNumber);
 
-  
 
-    // useEffect(() => {
-    //   axios.get("https://jsonplaceholder.typicode.com/users")
-    //     .then(response => setUsers(response.data))
-    //     .catch(err)
-    // }, []);
+ 
+    const deleteApplicantion = async (application) => {
+      try {
+        const config = {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${cookies?.token}`
+          },
+        }
+      const response = await axios.delete(
+        `/api/admin/${application._id}`,
+        config
+      ) 
+      const number = 1
+      dispatch(paginatePosts(number))
+      toast.success(response.message)
+      } catch (error) {
+        toast.error(error.response)
+      }
+    };
 
-    //console.log("pizza", {users})
-    
+    const handleSearch = async () => {
+      const application2 = await axios.post(`/api/admin/search`,{ position1, name1, email1, status1},
+      {headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${cookies?.token}`
+      }}
+      ) 
+      setRealtimeApplicants(application2.data);
+    }
+
 
   return (
     
         <div className=''>
-        <div className='flex items-start justify-center'>
             <div class="p-5 md:w-auto bg-gray-100">
                  <div className='mb-2 w-auto h-auto flex  items-start justify-between'>
                     <div className=' text-2xl font-bold ' >Appication List</div>
@@ -95,9 +125,25 @@ function ApplicationsList() {
                      </span>
                      <span className='ml-2'>entries</span>
                   </div>
+                  <div className="flex-col">
                   <div className='ml-2 flex items-start'>
-                      <div className=''> search:</div>
-                      <input className='ml-2 border-none outline-none px-2 '></input>
+                      <div className=''> position:</div>
+                      <input onChange={(e) => setPosition(e.target.value)} className='ml-2 mb-2 border-none outline-none px-2 '></input>
+                 </div>
+                 <div className='ml-2 flex items-start'>
+                      <div className=''> Name:</div>
+                      <input onChange={(e) => setName(e.target.value)} className='ml-2 mb-2 border-none outline-none px-2 '></input>
+                 </div>
+                 <div className='ml-2 flex items-start'>
+                      <div className=''> Email:</div>
+                      <input onChange={(e) => setEmail(e.target.value)} className='ml-2 mb-2 border-none outline-none px-2 '></input>
+                 </div>
+                 <div className='ml-2 flex items-start'>
+                      <div className=''> status:</div>
+                      <input onChange={(e) => setStatus(e.target.value)} className='ml-2 mb-2 border-none outline-none px-2 '></input>
+                      <button  onClick={handleSearch}
+                      className='ml-1 p-1.5 text-xs font-medium uppercase tracking-wider text-blue-800 bg-blue-200 rounded-md'>Search</button>
+                 </div>
                  </div>
                </div>
                 
@@ -107,25 +153,29 @@ function ApplicationsList() {
                       <tr>
                         <th class="w-20 p-3 text-sm font-semibold tracking-wide text-center">#</th>
                         <th class="p-3 text-sm font-semibold tracking-wide text-center">Applicant Information</th>
+                        <th class="w-24 p-3 text-sm font-semibold tracking-wide text-center">Email</th>
                         <th class="w-24 p-3 text-sm font-semibold tracking-wide text-center">Status</th>
                         <th class="w-32 p-3 text-sm font-semibold tracking-wide text-center">Action</th>
                       </tr>
                       </thead>
                       <tbody class="divide-y divide-gray-100">
-                      {posts?.data?.map((j) =>
-                         <tr class="bg-white">
+                      {currentPosts && currentPosts.map((j) =>
+                         <tr key={j._id} class="bg-white">
                            <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
                              <a href="#" class="font-bold text-blue-500 hover:underline">1</a>
                            </td>
                            <td class="p-3 text-md font-semibold text-gray-700 whitespace-nowrap">
-                             Name : {j.applicantId?.name}
-                             <p className='text-xs font-normal'> Applied for : {j.jobId?.position} </p>
+                             Name : {j.name}
+                             <p className='text-xs font-normal'> Applied for : {j.position} </p>
                            </td>
+                           <td class="p-3 text-sm text-gray-700 whitespace-nowrap text-center">{j.email}</td>
                            <td class="p-3 text-sm text-gray-700 whitespace-nowrap text-center">{j.stage}</td>
                            <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                                <button className='ml-1 p-1.5 text-xs font-medium uppercase tracking-wider text-blue-800 bg-blue-200 rounded-md'>View</button>
-                                <button className='ml-1 p-1.5 text-xs font-medium uppercase tracking-wider text-blue-800 bg-blue-200 rounded-md'>Edit</button>
-                                <button className='ml-1 p-1.5 text-xs font-medium uppercase tracking-wider text-red-800 bg-red-200 rounded-md'>Delete</button>
+                              <Link href={`/admin/view/${j._id}`}>
+                                 <button className='ml-1 p-1.5 text-xs font-medium uppercase tracking-wider text-blue-800 bg-blue-200 rounded-md'>View</button>
+                               </Link>
+                                <button onClick={() => deleteApplicantion(j)}
+                                className='ml-1 p-1.5 text-xs font-medium uppercase tracking-wider text-red-800 bg-red-200 rounded-md'>Delete</button>
                            </td>
                          </tr>
                           )}
@@ -135,29 +185,11 @@ function ApplicationsList() {
                 </div>
                 <div className='mt-2 w-auto h-auto flex  items-start justify-between'>
                     <div className='' >Showing 1 to 10 of 11 entries</div>
-                    <Paginate/>
+                    <FrontPaginate postsPerPage={postsPerPage}
+                        totalPosts={realtimeApplicant.length}
+                        paginate={paginate}/>
                 </div>
           </div>
-          
-
-          <div className='bg-black rounded-lg p-3'>
-            <div className='statusbtn'>All</div>
-            <div className='statusbtn'>New</div>
-            <div className='statusbtn'>For Initial Interview</div>
-            <div className='statusbtn'>Passed II</div>
-            <div className='statusbtn'>Failed</div>
-            <div className='statusbtn'>For Final Interview</div>
-            <div className='statusbtn'>Passed FI</div>
-            <div className='statusbtn'>Failed FI</div>
-            <div className='statusbtn'>For Pooling</div>
-            <div className='statusbtn'>Job Offer</div>
-            <div className='statusbtn'>Hired</div>
-            <div className='statusbtn'>Withdraw Application</div>
-          
-          </div>
-
-
-          </div>      
     </div>
   )
 }

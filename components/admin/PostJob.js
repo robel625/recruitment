@@ -43,10 +43,10 @@ function PostJob({ handleClose }) {
             "Content-Type": "application/json",
           },
         }
- 
+         const desc = quillRef.current.firstChild.innerHTML
         const { data } = await axios.post(
           `/api/admin/job`,
-          { position, avalablity, status, miniDesc, userid },
+          { position, avalablity, status, miniDesc, desc, userid },
           config
         )
 
@@ -108,9 +108,8 @@ function PostJob({ handleClose }) {
                onChange={(e) => setMiniDesc(e.target.value)}>
             </textarea>
             <h4>Descripition</h4>
-            <div style={{ width: 500, height: 150 }} className='bg-white'>
+            <div  className='bg-white'>
                <div ref={quillRef}
-                 theme="snow"
                  value={quill}
                  />
            </div>

@@ -4,6 +4,8 @@ import { modalState, modalTypeState } from "../../atoms/modalAtom";
 import { useEffect, useState } from "react";
 import { handlePostState, useSSRPostsState } from "../../atoms/postAtom";
 
+import FrontPaginate from "./FrontPaginate";
+
 import { useQuill } from 'react-quilljs';
 import 'quill/dist/quill.snow.css'; 
 import DOMPurify from "dompurify";
@@ -28,6 +30,7 @@ function VacancyList({ jobs }) {
 
       const responseData = await response.json();
       setRealtimePosts(responseData);
+      
 
       if(handlePost === true){
         setUseSSRPosts(false)
@@ -45,6 +48,23 @@ function VacancyList({ jobs }) {
   //   }
   // }, [quill]);
 
+  // const [posts, setPosts] = useState([]);
+  // const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postsPerPage] = useState(5);
+  
+  useEffect(() => {
+    setRealtimePosts(jobs)
+  }, []);
+
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentPosts = realtimePosts && realtimePosts.slice(indexOfFirstPost, indexOfLastPost);
+
+
+  const paginate = pageNumber => setCurrentPage(pageNumber);
+
+  
   const deletePost = async (job) => {
     const response = await fetch(`/api/jobs/${job._id}`, {
       method: "DELETE",
@@ -55,6 +75,8 @@ function VacancyList({ jobs }) {
   };
 
   //Text='<%# Bind("<h1>tiltl</h1><h4>Content</h4>") %>'
+
+  
 
   return (
     <div className=' '>
@@ -73,7 +95,7 @@ function VacancyList({ jobs }) {
            )} */}
 
           
-
+      
         <div>
             <div class="p-5 h-screen w-screen md:w-auto bg-gray-100">
                  <div className='mb-2 w-auto h-auto flex  items-start justify-between'>
@@ -122,8 +144,7 @@ function VacancyList({ jobs }) {
                       </thead>
                       <tbody class="divide-y divide-gray-100">
                          
-                      {!useSSRPosts
-                             ?realtimePosts.map((job) =>
+                        {currentPosts && currentPosts.map((job) =>
                          <tr class="bg-white">
                            <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
                              <a href="#" class="font-bold text-blue-500 hover:underline">{job.descripition}</a>
@@ -146,38 +167,16 @@ function VacancyList({ jobs }) {
                                 <button   onClick={() => deletePost(job)}
                                  className='ml-1 p-1.5 text-xs font-medium uppercase tracking-wider text-red-800 bg-red-200 rounded-md'>Delete</button>
                            </td>
-                         </tr>)
-                         : jobs.map((job) =>
-                         <tr class="bg-white">
-                           <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                             <a href="#" class="font-bold text-blue-500 hover:underline">{job.descripition}</a>
-                           </td>
-                           <td class="p-3 text-md font-semibold text-gray-700 whitespace-nowrap">
-                             Position : {job.position} 77
-                             <p className='text-xs font-normal'>{job.miniDesc}</p>
-                           </td>
-                           <td class="p-3 text-sm text-gray-700 whitespace-nowrap text-center">{job.avalablity}</td>
-                           <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                           {job.status === "Active" ? ( <span
-                             class="p-1.5 text-xs font-medium uppercase tracking-wider text-green-800 bg-green-200 rounded-lg bg-opacity-50 ">{job.status}
-                           </span>):(<span
-                             class="p-1.5 text-xs font-medium uppercase tracking-wider text-yellow-800 bg-yellow-200 rounded-lg bg-opacity-50 ">{job.status}
-                           </span>)}
-                           </td>
-                           <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                                <button className='ml-1 p-1.5 text-xs font-medium uppercase tracking-wider text-blue-800 bg-blue-200 rounded-md'>View</button>
-                                <button className='ml-1 p-1.5 text-xs font-medium uppercase tracking-wider text-blue-800 bg-blue-200 rounded-md'>Edit</button>
-                                <button onClick={() => deletePost(job)}
-                                 className='ml-1 p-1.5 text-xs font-medium uppercase tracking-wider text-red-800 bg-red-200 rounded-md'>Delete</button>
-                           </td>
-                         </tr> )} 
-
+                         </tr>)}
+                         
                       </tbody>
                     </table> 
                 </div>
                 <div className='mt-2 w-auto h-auto flex  items-start justify-between'>
-                    <div className='' >Showing 1 to 10 of 11 entries</div>
-                    <div className=''>Previous</div>
+                    <div className='' >Showing 1ppp to 10 of 11 entries</div>
+                    <FrontPaginate postsPerPage={postsPerPage}
+                        totalPosts={realtimePosts.length}
+                        paginate={paginate}/>
                 </div>
                 
          

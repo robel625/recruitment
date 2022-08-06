@@ -12,14 +12,26 @@ const applicationSchema = new Schema({
         ref: 'User',
         required: true
     },
+    image: { type: String },
     // recruiterId: {
     //     type: Schema.Types.ObjectId,
     //     ref: 'User',
     //     required: true
     // },
+    position: {
+        type: String,
+      },
+    name: {
+        type: String,
+      },
+    
+      email: {
+        type: String,
+        required: true,
+      },
     stage: {
-        type: Number,
-        default: 0
+        type: String,
+        default: 'New',
       },
     // status: {
     //     type: String

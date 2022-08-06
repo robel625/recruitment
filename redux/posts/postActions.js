@@ -15,9 +15,9 @@ import {
   GET_PAGINATE_FAIL,
   GET_PAGINATE_SUCCESS,
   GET_PAGINATE_REQUEST,
-  // SEARCH_POSTS_REQUEST,
-  // SEARCH_POSTS_SUCCESS,
-  // SEARCH_POSTS_FAIL,
+  SEARCH_POSTS_REQUEST,
+  SEARCH_POSTS_SUCCESS,
+  SEARCH_POSTS_FAIL,
   // CLEAR_DATA,
   // CREATE_COMMENT_REQUEST,
   // CREATE_COMMENT_FAIL,
@@ -193,37 +193,37 @@ export const paginatePosts = (number) => async (dispatch) => {
   }
 }
 
-// export const postSearch = (search, page) => async (dispatch) => {
-//   try {
-//     dispatch({ type: SEARCH_POSTS_REQUEST })
+export const postSearch = (newposition, newname, newemail, newstatus, page) => async (dispatch) => {
+  try {
+    dispatch({ type: SEARCH_POSTS_REQUEST })
 
-//     const config = {
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//     }
-//     const { data } = await axios.post(
-//       `/api/posts/search?search=${search}`,
-//       { page },
-//       config
-//     )
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+    const { data } = await axios.post(
+      `/api/admin/application/search?search=${newposition},${newname},${newemail},${newstatus}`,
+      { page },
+      config
+    )
 
-//     console.log(data)
+    console.log(data)
 
-//     dispatch({
-//       type: SEARCH_POSTS_SUCCESS,
-//       payload: data,
-//     })
-//   } catch (error) {
-//     dispatch({
-//       type: SEARCH_POSTS_FAIL,
-//       payload:
-//         error.response && error.response.data.message
-//           ? error.response.data.message
-//           : error.message,
-//     })
-//   }
-// }
+    dispatch({
+      type: SEARCH_POSTS_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: SEARCH_POSTS_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
 // export const getPostBySearch = (tags) => async (dispatch) => {
 //   try {
 //     dispatch({ type: SEARCH_POSTS_REQUEST })

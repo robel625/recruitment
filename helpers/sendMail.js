@@ -17,7 +17,7 @@ export const sendEmail = (options) => {
 
   const mailOptions = {
     from: '"Robel1" <robelgulima1@gmail.com>', // sender address
-    to: 'robelgumlima@gmail.com', // list of receivers
+    to: 'robelgulima@gmail.com', // list of receivers
     subject: options.subject, // Subject line
     //text: `Daily Report`, // plain text body
     html: options.text, // html body

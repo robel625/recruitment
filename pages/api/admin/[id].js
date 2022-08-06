@@ -10,7 +10,7 @@ export default Authenticated(async (req, res) => {
     method,
     query: { id },
   } = req;
-  console.log("get1", req.user);
+  console.log("get1", req.id);
   if(!req.user){
     return res.status(404).json({message: "Please login"})
   }
@@ -31,23 +31,27 @@ export default Authenticated(async (req, res) => {
     //   return res.status(500).json({message: `'ggg', ${err}`})
     // }
 
-    if (req.method === "GET") {
-      try {
-        const job = await Job.find();
-       return res.status(200).json(job);
-      } catch (err) {
-        return res.status(500).json(err);
-      }
+    // if (req.method === "GET") {
+    //   try {
+    //     const job = await Job.find();
+    //    return res.status(200).json(job);
+    //   } catch (err) {
+    //     return res.status(500).json(err);
+    //   }
       
-    }
+    // }
     
     try {
     if (method === "POST") {
-      const { jobid, apply } = req.body
+      const { jobid, position, userid, email, name, pdfFile } = req.body
       const newApplication = await new Application({
         jobId: new ObjectId(jobid),
-        applicantId: new ObjectId(apply),
-
+        applicantId: new ObjectId(userid),
+        position: position,
+        name: name,
+        email: email,
+        image: pdfFile,
+        
       }).save()
 
       await newApplication.save()
@@ -60,6 +64,37 @@ export default Authenticated(async (req, res) => {
   } catch (err) {
     return res.status(500).json(err);
   }
+
+  if (method === "DELETE") {
+    try {
+      await Application.deleteOne({ _id: new ObjectId(id) })
+      return res.status(200).json({ message: "The Application has been deleted!!" });
+    } catch (error) {
+      return res.status(500).json(error);
+    }
+  }
+
+  if (req.method === "GET") {
+    try {
+      const application = await Application.findOne({ _id: new ObjectId(id) });
+      return res.status(200).json(application);
+    } catch (err) {
+      return res.status(404).json(err);
+    }
+  }
+
+  
+    if (req.method === "PUT") {
+      try {
+        const { selectedOption } = req.body
+      const application  = await Application.findOneAndUpdate({ _id: new ObjectId(id)}, {stage: selectedOption} );
+      console.log("application ", application )
+      return res.status(200).json(application);
+       } catch (err) {
+       return res.status(404).json(err);
+    }
+  }
+  
 
   
 })
